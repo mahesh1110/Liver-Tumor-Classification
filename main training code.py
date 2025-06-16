@@ -12,9 +12,8 @@ from torch.cuda.amp import autocast, GradScaler
 from tqdm import tqdm
 import time
 
-# -------------------------------
 # CONFIG: Change these if needed
-# -------------------------------
+
 CT_DIR = "/home/Somepalli/mahesh/CECT_data/ct_files/"
 MASK_DIR = "/home/Somepalli/mahesh/CECT_data/mask_files/"
 OUTPUT_DIR = "preprocessed_slices/"
@@ -24,9 +23,9 @@ BATCH_SIZE = 4
 NUM_EPOCHS = 10
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# -------------------------------
+
 # STEP 1: Preprocess .nii.gz to .npy
-# -------------------------------
+
 def preprocess_nifti(ct_dir, mask_dir, output_dir, metadata_path):
     os.makedirs(output_dir, exist_ok=True)
     ct_files = sorted([f for f in os.listdir(ct_dir) if f.endswith(".nii.gz")])
@@ -75,9 +74,9 @@ def preprocess_nifti(ct_dir, mask_dir, output_dir, metadata_path):
     print(f"✅ Preprocessing complete. {len(slice_metadata)} slices saved.")
     return slice_metadata
 
-# -------------------------------
+
 # STEP 2: Dataset Class
-# -------------------------------
+
 class NPYSliceDataset(Dataset):
     def _init_(self, slice_metadata, root):
         self.slice_metadata = slice_metadata
@@ -92,9 +91,9 @@ class NPYSliceDataset(Dataset):
         ct_slice = np.expand_dims(ct_slice, axis=0).astype(np.float32)
         return torch.tensor(ct_slice), label
 
-# -------------------------------
+
 # STEP 3: Model Definition
-# -------------------------------
+
 class ResNet50Binary(nn.Module):
     def _init_(self):
         super(ResNet50Binary, self)._init_()
@@ -105,9 +104,9 @@ class ResNet50Binary(nn.Module):
     def forward(self, x):
         return self.model(x)
 
-# -------------------------------
+
 # STEP 4: Training & Validation
-# -------------------------------
+
 def train_one_epoch(model, loader, optimizer, criterion, scaler):
     model.train()
     total_loss, correct = 0.0, 0
@@ -145,9 +144,9 @@ def validate(model, loader, criterion):
 
     return total_loss / len(loader.dataset), correct / len(loader.dataset)
 
-# -------------------------------
+
 # MAIN FUNCTION
-# -------------------------------
+
 def main():
     # Step 1: Preprocess if needed
     if not os.path.exists(METADATA_PATH):
