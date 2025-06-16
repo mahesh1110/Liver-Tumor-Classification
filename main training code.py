@@ -12,7 +12,7 @@ from torch.cuda.amp import autocast, GradScaler
 from tqdm import tqdm
 import time
 
-# CONFIG: Change these if needed
+# CONFIG
 
 CT_DIR = "/home/Somepalli/mahesh/CECT_data/ct_files/"
 MASK_DIR = "/home/Somepalli/mahesh/CECT_data/mask_files/"
