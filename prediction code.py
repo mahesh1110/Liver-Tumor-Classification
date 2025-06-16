@@ -7,13 +7,13 @@ import random
 import matplotlib.pyplot as plt
 from torchvision import models
 
-# ----- Paths -----
+#  Paths 
 MODEL_PATH = "/home/Somepalli/mahesh/best_model.pth"
 SLICE_DIR = "/home/Somepalli/mahesh/preprocessed_slices"
 PRIMARY_METADATA_PATH = "/home/Somepalli/mahesh/slice_metadata.json"
 FALLBACK_METADATA_PATH = "/home/Somepalli/mahesh/slice_metadata.json"
 
-# ----- Load model -----
+# Load model 
 class ResNet50Binary(nn.Module):
     def _init_(self):
         super(ResNet50Binary, self)._init_()
@@ -32,7 +32,7 @@ model.load_state_dict(torch.load(MODEL_PATH, map_location=DEVICE))
 model.eval()
 model.to(DEVICE)
 
-# ----- Load metadata with exception handling -----
+#  Load metadata with exception handling 
 try:
     if os.path.exists(PRIMARY_METADATA_PATH):
         with open(PRIMARY_METADATA_PATH, 'r') as f:
@@ -49,9 +49,9 @@ except Exception as e:
     metadata = []
     exit()  # Exit early if metadata is missing
 
-# ----- Randomly sample 5 slices -----
+#  Randomly sample 5 slices 
 samples = random.sample(metadata, 5)
-# ----- Predict and compare (side-by-side plots) -----
+#  Predict and compare (side-by-side plots) 
 fig, axes = plt.subplots(1, 5, figsize=(20, 4))  # 1 row, 5 columns
 
 for i, (fname, true_label) in enumerate(samples):
